@@ -23,12 +23,13 @@ void printEA_kvp(struct Element a[], int length);
 void* newEA_kvp(int length, uint64_t min_key, uint64_t max_key);
 float GetTimeUs64();
 
-#define NR_OF_ELEMENTS 2000
-#define MIN_KEY 0
-#define MAX_KEY 500000
+#define NR_OF_ELEMENTS 20
+#define MIN_KEY 10
+#define MAX_KEY 99
 #define MAX_LIST_LENGTH 256
-#define PRINT_ARRAYS 0
+#define PRINT_ARRAYS 1
 
+// Compile & Run: clear && nasm -f elf64 -o Linux64.out Linux64.asm && gcc test.c Linux64.out && ./a.out
 void main(){
 
     uint64_t* a = (uint64_t*)newEA(NR_OF_ELEMENTS, MIN_KEY, MAX_KEY);
@@ -58,7 +59,7 @@ void main(){
     if(PRINT_ARRAYS) printEA(c, NR_OF_ELEMENTS);
     printf("Took %1.0f µs\n", seclection_us);
 
-    printf("\nBucket != Selection:  %i bytes\n", compare(b, c, NR_OF_ELEMENTS * 8));
+    printf("\nBucket != Selection:  %li bytes\n", compare(b, c, NR_OF_ELEMENTS * 8));
 
     if(PRINT_ARRAYS) printf("\n\nUnsorted (kvp):");
     if(PRINT_ARRAYS) printEA_kvp(a_kvp, NR_OF_ELEMENTS);
@@ -78,7 +79,7 @@ void main(){
     if(PRINT_ARRAYS) printEA_kvp(c_kvp, NR_OF_ELEMENTS);
     printf("Took %1.0f µs\n", seclection_kvp_us);
     
-    printf("\nBucket(kvp) != Selection(kvp):  %i bytes\n", compare(b_kvp, c_kvp, NR_OF_ELEMENTS * 16));
+    printf("\nBucket(kvp) != Selection(kvp):  %li bytes\n", compare(b_kvp, c_kvp, NR_OF_ELEMENTS * 16));
 
 }
 float GetTimeUs64()
@@ -91,14 +92,14 @@ float GetTimeUs64()
 void printEA(uint64_t a[], int length){
     for(int i=0; i<length; i++){
         if(i % 12 == 0) printf("\n");
-        printf(" %6i", a[i]);
+        printf(" %6li", a[i]);
     }
     printf("\n");
 }
 void printEA_kvp(struct Element a[], int length){
     for(int i=0; i<length; i++){
         if(i % 8 == 0) printf("\n");
-        printf(" { %6i, %6i } ", a[i].key, a[i].value);
+        printf(" { %6li, %6li } ", a[i].key, a[i].value);
     }
     printf("\n");
 }

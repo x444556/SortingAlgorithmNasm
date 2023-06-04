@@ -323,13 +323,13 @@ section .text
             cmp rcx, QWORD [rbp - 48] ; while(rcx < STORAGE_ARRAY_LENGTH)
             je .read_end
 
-            xor rdx, rdx
+            mov rdx, QWORD [rdi]
             .write:
-                cmp rdx, QWORD [rdi]
-                je .write_end
+                and rdx, rdx
+                jz .write_end
 
                 ; rax = value at [STORAGE_ARRAY_PTR(current element) + (current_list_index+1)*8] (this is the value)
-                mov rax, QWORD [rdi + (rdx + 1) * 8]
+                mov rax, QWORD [rdi + rdx * 8]
                 mov QWORD [rsi + 8], rax
 
                 ; rax = index_STORAGE_ARRAY + MIN_KEY (this is the key)
@@ -338,7 +338,7 @@ section .text
                 mov QWORD [rsi], rax
 
                 add rsi, 16
-                inc rdx
+                dec rdx
                 jmp .write
             .write_end:
 
